@@ -5,6 +5,8 @@
  */
 package main;
 
+import java.util.LinkedList;
+
 /**
  *
  * @author itsaf
@@ -14,6 +16,9 @@ public class Elevator {
     private int currentFloor;
     private int currentPassenger;
     private int totalPassenger;
+    
+    LinkedList<Integer> sourceFloor = new LinkedList<>();
+    LinkedList<Integer> destinationFloor = new LinkedList<>();
     
     Elevator(){
         time = 0;
@@ -50,6 +55,7 @@ public class Elevator {
     }
     
     public void toFloor(int des){
+        destinationFloor.add(des);
         System.out.println("[" + floorDisplay(currentFloor) + "] " + time + ": Heading to floor " + floorDisplay(des));
         int floorDifference = Math.abs(des - currentFloor);
         time += floorDifference;
@@ -58,6 +64,7 @@ public class Elevator {
     }
     
     public void sourceFloor(int src){
+        sourceFloor.add(src);
         if(currentFloor != src){
             toFloor(src);
             currentFloor = src;
@@ -82,6 +89,11 @@ public class Elevator {
         else{
             return "G";
         }
+    }
+    
+    public void display(){
+        System.out.println("Source floor queue: " + sourceFloor.toString());
+        System.out.println("Destination floor queue: " + destinationFloor.toString());
     }
 
 }

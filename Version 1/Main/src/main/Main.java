@@ -5,6 +5,7 @@
  */
 package main;
 
+import java.util.LinkedList;
 import java.util.Scanner;
 
 /**
@@ -32,8 +33,7 @@ public class Main {
             System.out.println("");
             
             if(source < 0 ){
-                System.out.println("Simulator ended");
-                el.displayReport();
+                endSimulator(el);
                 break;
             }
             
@@ -46,8 +46,7 @@ public class Main {
             System.out.println("");
             
             if(destination < 0){
-                System.out.println("Simulator ended");
-                el.displayReport();
+                endSimulator(el);
                 break;
             }
             
@@ -58,4 +57,9 @@ public class Main {
     
     }
     
-}
+    public static void endSimulator(Elevator el){
+        System.out.println("Simulator ended");
+        el.displayReport();
+        el.display();
+    }
+  }
