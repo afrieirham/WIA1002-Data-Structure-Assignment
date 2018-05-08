@@ -67,6 +67,7 @@ public class Elevator {
         sourceFloor.add(src);
         if(currentFloor != src){
             toFloor(src);
+            destinationFloor.removeLast();
             currentFloor = src;
         }
     }
