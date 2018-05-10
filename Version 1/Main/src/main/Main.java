@@ -29,9 +29,8 @@ public class Main{
         int destination;
         int source;
         Elevator el = new Elevator();
-//        Scanner input = new Scanner(System.in);
-        String test = JOptionPane.showInputDialog("Enter the number of passenger: ");
-        int num = Integer.parseInt(test);
+        String input = JOptionPane.showInputDialog("Enter the number of passenger: ");
+        int num = Integer.parseInt(input);
         Passenger[] pass = new Passenger[num];
         createPassenger(num, pass);
         Random rand = new Random();

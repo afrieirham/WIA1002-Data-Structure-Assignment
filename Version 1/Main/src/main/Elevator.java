@@ -5,12 +5,21 @@
  */
 package main;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.LinkedList;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -21,7 +30,7 @@ public class Elevator extends JFrame {
     private int currentFloor;
     private int currentPassenger;
     private int totalPassenger;
-    private JLabel item1, item2, item3;
+    private String reportFile;
     
     
     LinkedList<Integer> sourceFloor = new LinkedList<>();
@@ -91,9 +100,17 @@ public class Elevator extends JFrame {
     
     public void displayReport(){
         
-        JOptionPane.showMessageDialog(null, "Time elapsed: " + time
-                + "\nCurrent floor: " + floorDisplay(currentFloor) + "\nTotal passenger served: " + totalPassenger, 
+        JOptionPane.showMessageDialog(null, 
+                "Time elapsed: " + time + 
+                "\nCurrent floor: " + floorDisplay(currentFloor) + 
+                "\nTotal passenger served: " + totalPassenger, 
                 "Report File", JOptionPane.INFORMATION_MESSAGE);
+        
+        reportFile = 
+                "===================REPORT FILE===================" +
+                "\nTime elapsed: " + time + " second(s)" +
+                "\nCurrent floor: " + floorDisplay(currentFloor) + 
+                "\nTotal passenger served: " + totalPassenger;
 
     }
     
@@ -110,31 +127,86 @@ public class Elevator extends JFrame {
         }
     }
     
-    public void display(){
+    public void display() throws FileNotFoundException, DocumentException{
 
-    String logReport = "            Lift Activities\n"
-            + "            ===================================================\n";
-    
-    for(int i=0;  i<logFile.size() - 1; i++){
-        logReport += "            " + logFile.get(i) + "\n";
-    }
-    
-    logReport += "            ===================================================";
-    
-    JFrame window = new JFrame("Log Report File");
-    window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    final JTextArea textArea = new JTextArea(10, 20);
-    JScrollPane scroll = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    textArea.setText(logReport);
-    textArea.setLineWrap(true);
-    textArea.setWrapStyleWord(true);
-    window.add(scroll);
-    window.setSize(500, 500);
-    window.setVisible(true);
-    window.setLocationRelativeTo(null);
-    
+        String logReport =
+                "            =================LOG REPORT FILE=================\n";
+
+        for(int i=0;  i<logFile.size() - 1; i++){
+            logReport += "            " + logFile.get(i) + "\n";
+        }
+
+        logReport += "            =======================END=======================";
+
+        JFrame window = new JFrame("Log Report File");
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        final JTextArea textArea = new JTextArea(10, 20);
+        JScrollPane scroll = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        textArea.setText(logReport);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        window.add(scroll);
+        window.setSize(500, 500);
+        window.setVisible(true);
+        window.setLocationRelativeTo(null);
+        
+        window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        window.addWindowListener(new WindowAdapter(){
+            @Override
+            public void windowClosing(WindowEvent we) {
+                int ans = JOptionPane.showConfirmDialog(scroll, "Do you want to save the record into PDF file?", "Saving file", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                if(ans == JOptionPane.YES_OPTION){
+                    String logReport = "\n=================LOG REPORT FILE=================\n";
+                    
+                    for(int i=0;  i<logFile.size() - 1; i++){
+                        logReport += logFile.get(i) + "\n";
+                    }
+
+                    logReport += "===================================================";
+                    try {
+                        saveToPDF(logReport);
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(Elevator.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (DocumentException ex) {
+                        Logger.getLogger(Elevator.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                    we.getWindow().dispose();
+                }
+            }
+        
+        });
+        
+        
+        
+//        if(ans == JOptionPane.YES_OPTION){
+//            logReport = 
+//                    "\n=================LOG REPORT FILE=================\n";
+//                    
+//
+//            for(int i=0;  i<logFile.size() - 1; i++){
+//                logReport += logFile.get(i) + "\n";
+//            }
+//
+//            logReport += "===================================================";
+//            saveToPDF(logReport);
+//        }
         
     }
+    
+    private void saveToPDF(String data) throws FileNotFoundException, DocumentException{
+        
+        Document document = new Document();
+        String fileName = JOptionPane.showInputDialog("File name?");
+        fileName += ".pdf";
+        PdfWriter.getInstance(document, new FileOutputStream(fileName));
+        
+        document.open();
+        document.add(new Paragraph(reportFile));
+        document.add(new Paragraph(data));
+        document.close();
+
+    } 
     
 
 }
