@@ -5,14 +5,12 @@
  */
 package main;
 
-import java.awt.Component;
-import java.awt.FlowLayout;
-import java.util.LinkedList;
+import com.itextpdf.text.DocumentException;
+import java.io.FileNotFoundException;
 import java.util.Random;
-import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 /**
  *
@@ -25,6 +23,10 @@ public class Main{
      */
     public static void main(String[] args) {
         
+        String s = "====================================";
+        System.out.println(s.length());
+        String a = "===================================";
+        System.out.println(a.length());
         
         int destination;
         int source;
@@ -69,8 +71,13 @@ public class Main{
     
     public static void endSimulator(Elevator el, Passenger[] pass){        
         el.displayReport();
-        el.display();
-//        displayPassengerData(pass);
+        try {
+            el.display();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DocumentException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public static void createPassenger(int passengerNumber, Passenger[] pass){

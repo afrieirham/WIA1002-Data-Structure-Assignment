@@ -11,7 +11,6 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.util.LinkedList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -107,10 +106,11 @@ public class Elevator extends JFrame {
                 "Report File", JOptionPane.INFORMATION_MESSAGE);
         
         reportFile = 
-                "===================REPORT FILE===================" +
+                "===============================REPORT FILE===============================" +
                 "\nTime elapsed: " + time + " second(s)" +
                 "\nCurrent floor: " + floorDisplay(currentFloor) + 
-                "\nTotal passenger served: " + totalPassenger;
+                "\nTotal passenger served: " + totalPassenger +
+                "\n==========================================================================";
 
     }
     
@@ -156,13 +156,14 @@ public class Elevator extends JFrame {
             public void windowClosing(WindowEvent we) {
                 int ans = JOptionPane.showConfirmDialog(scroll, "Do you want to save the record into PDF file?", "Saving file", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
                 if(ans == JOptionPane.YES_OPTION){
-                    String logReport = "\n=================LOG REPORT FILE=================\n";
+                    String logReport = "\n=============================LOG REPORT FILE=============================\n";
                     
                     for(int i=0;  i<logFile.size() - 1; i++){
                         logReport += logFile.get(i) + "\n";
                     }
 
-                    logReport += "===================================================";
+                    logReport += "==========================================================================";
+                    logReport += "\n\n\n===================================END====================================";
                     try {
                         saveToPDF(logReport);
                     } catch (FileNotFoundException ex) {
@@ -176,21 +177,6 @@ public class Elevator extends JFrame {
             }
         
         });
-        
-        
-        
-//        if(ans == JOptionPane.YES_OPTION){
-//            logReport = 
-//                    "\n=================LOG REPORT FILE=================\n";
-//                    
-//
-//            for(int i=0;  i<logFile.size() - 1; i++){
-//                logReport += logFile.get(i) + "\n";
-//            }
-//
-//            logReport += "===================================================";
-//            saveToPDF(logReport);
-//        }
         
     }
     

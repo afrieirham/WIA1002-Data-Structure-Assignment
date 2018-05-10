@@ -13,9 +13,9 @@ import java.util.Random;
  */
 public class Passenger {
     
-    private int source;
-    private int destination;
-    private int time;
+    private final int source;
+    private final int destination;
+    private final int time;
     
     Random rand = new Random();
     
