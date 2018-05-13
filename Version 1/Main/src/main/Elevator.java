@@ -174,6 +174,9 @@ public class Elevator extends JFrame {
                     
                     we.getWindow().dispose();
                 }
+                else{
+                    we.getWindow().dispose();
+                }
             }
         
         });

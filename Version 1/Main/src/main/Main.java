@@ -23,11 +23,6 @@ public class Main{
      */
     public static void main(String[] args) {
         
-        String s = "====================================";
-        System.out.println(s.length());
-        String a = "===================================";
-        System.out.println(a.length());
-        
         int destination;
         int source;
         Elevator el = new Elevator();
